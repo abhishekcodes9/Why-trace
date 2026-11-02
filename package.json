@@ -1,0 +1,20 @@
+{
+  "name": "whytrace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Evidence-first engineering decision investigation platform",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node scripts/smoke-test.js && node scripts/e2e-validate.js && node scripts/regression-quality.js && node scripts/acceptance-test.js",
+    "test:integration": "node scripts/verify-github-integration.js",
+    "test:acceptance": "node scripts/acceptance-test.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "neo4j-driver": "^6.3.0"
+  }
+}

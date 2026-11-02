@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070b13" />
+  <meta name="description" content="WhyTrace — Ask why the code exists. Evidence-first engineering investigation powered by Neo4j knowledge graphs." />
+  <title>WhyTrace — Understand why the code exists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/app.js"></script>
+</head>
+<body>
+<main id="landing" class="landing app-shell">
+  <header class="landing-nav">
+    <a href="/" class="brand" data-home><span class="brand-mark">&#8984;</span><span>Why<span class="brand-accent">Trace</span></span></a>
+    <nav class="nav-links">
+      <a href="#how">How it works</a><a href="#evidence">Evidence model</a><a href="#neo4j">Neo4j</a>
+      <button class="nav-cta" data-enter>Open workspace <span>&#8599;</span></button>
+    </nav>
+  </header>
+  <section class="landing-hero">
+    <div class="hero-copy-block">
+      <div class="hero-kicker"><i></i> APPLIED AI &middot; ENGINEERING DECISION INTELLIGENCE &middot; NEO4J GRAPH-FIRST</div>
+      <h1>Understand <span>why the code</span> exists.</h1>
+      <p>Code shows what happened. WhyTrace connects commits, pull requests, issues and engineering decisions to uncover the reasoning behind it &mdash; with evidence you can inspect and verify.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" data-enter>Start an investigation <b>&#8599;</b></button>
+        <button class="btn-secondary" data-enter>Explore demo <span>&#8984;</span></button>
+      </div>
+      <div class="hero-points">
+        <span>&#10003; Evidence-first answers</span>
+        <span>&#8984; Graph-grounded retrieval</span>
+        <span>&#9673; Honest abstention</span>
+        <span>&#11041; Neo4j persistent</span>
+      </div>
+    </div>
+    <div class="hero-preview">
+      <div class="preview-top"><span class="window-dots"><i></i><i></i><i></i></span><span>WHYTRACE / KNOWLEDGE GRAPH</span><span>PREVIEW</span></div>
+      <svg class="preview-graph" viewBox="0 0 620 310" aria-label="Illustrative graph preview">
+        <g class="preview-lines"><path d="M105 90L245 145L398 75L510 170M245 145L340 245L510 170M105 90L180 255L340 245M245 145L510 170"/></g>
+        <g class="preview-node cyan" transform="translate(245 145)"><circle r="25"/><circle r="16"/><text x="29" y="-4">FILE</text><text class="preview-sub" x="29" y="10">retry.ts</text></g>
+        <g class="preview-node red" transform="translate(105 90)"><circle r="22"/><circle r="14"/><text x="26" y="-4">ISSUE</text><text class="preview-sub" x="26" y="10">timeout report</text></g>
+        <g class="preview-node amber" transform="translate(398 75)"><circle r="24"/><circle r="15"/><text x="28" y="-4">DECISION</text><text class="preview-sub" x="28" y="10">retry limit = 3</text></g>
+        <g class="preview-node purple" transform="translate(510 170)"><circle r="23"/><circle r="15"/><text x="27" y="-4">PULL REQUEST</text><text class="preview-sub" x="27" y="10">PR #58671</text></g>
+        <g class="preview-node blue" transform="translate(180 255)"><circle r="22"/><circle r="14"/><text x="26" y="-4">COMMIT</text><text class="preview-sub" x="26" y="10">2f9e3a1</text></g>
+        <g class="preview-node green" transform="translate(340 245)"><circle r="22"/><circle r="14"/><text x="26" y="-4">CONFIG</text><text class="preview-sub" x="26" y="10">retryPolicy</text></g>
+        <text x="18" y="294" class="preview-watermark">ILLUSTRATIVE DEMO GRAPH &middot; SYNTHETIC DATA</text>
+      </svg>
+      <div class="preview-metrics">
+        <div><small>GRAPH STRUCTURE</small><b>Connected evidence</b></div>
+        <div><small>RETRIEVAL</small><b>Relationship-aware</b></div>
+        <div><small>ANSWER POLICY</small><b>Abstain on gaps</b></div>
+      </div>
+      <div class="floating-label">&#9679; TRACEABLE EVIDENCE</div>
+    </div>
+  </section>
+  <section class="landing-section" id="problem">
+    <div class="section-title">
+      <span class="eyebrow">THE KNOWLEDGE GAP</span>
+      <h2>The code survives.<br/>The reasoning often doesn't.</h2>
+      <p>Important engineering context lives across commit messages, closed pull requests, incidents, design notes and the people who remember why a decision was made.</p>
+    </div>
+    <div class="card-grid three">
+      <article class="feature-card"><div class="feature-icon">&#8984;</div><h3>History is fragmented</h3><p>A commit explains a change, but the motivating discussion may be buried in an issue or an old pull request.</p></article>
+      <article class="feature-card"><div class="feature-icon">&#8981;</div><h3>Search finds mentions, not intent</h3><p>Keyword search returns documents about a topic. It does not necessarily find the decision that governs it.</p></article>
+      <article class="feature-card"><div class="feature-icon">&#9719;</div><h3>Old decisions can mislead</h3><p>A decision may have changed later. Historical context must be read with dates, references and supersession evidence.</p></article>
+    </div>
+  </section>
+  <section class="landing-section" id="how">
+    <div class="section-title">
+      <span class="eyebrow">HOW WHYTRACE WORKS</span>
+      <h2>From repository history<br/>to an evidence path.</h2>
+      <p>WhyTrace turns repository artifacts into connected records, retrieves relevant relationships, and presents the source trail beside its explanation.</p>
+    </div>
+    <div class="steps-grid">
+      <article><b>01 / INGEST</b><h3>Connect a repository</h3><p>Fetch bounded public GitHub metadata, commits, pull requests, issues and changed files.</p></article>
+      <article><b>02 / CONNECT</b><h3>Build the graph</h3><p>Represent artifacts as nodes and only create links supported by fetched repository records.</p></article>
+      <article><b>03 / INVESTIGATE</b><h3>Traverse evidence</h3><p>Retrieve records by relevance and inspect connected artifacts rather than relying on isolated text.</p></article>
+      <article><b>04 / EXPLAIN</b><h3>Show what supports it</h3><p>Present available rationale, source records, confidence limits and missing evidence honestly.</p></article>
+    </div>
+  </section>
+  <section class="landing-section" id="evidence">
+    <div class="section-title">
+      <span class="eyebrow">BUILT FOR ENGINEERING TEAMS</span>
+      <h2>Not another chat box.<br/>An investigation surface.</h2>
+      <p>Each part of the workspace helps a developer follow the chain between code, change, discussion and decision.</p>
+    </div>
+    <div class="card-grid three">
+      <article class="feature-card"><div class="feature-icon">&#9678;</div><h3>Graph-powered context</h3><p>Inspect files, commits, pull requests, issues, contributors and decision records as connected entities.</p></article>
+      <article class="feature-card"><div class="feature-icon">&#8599;</div><h3>Source-level traceability</h3><p>Open original GitHub records and inspect the evidence used by an investigation.</p></article>
+      <article class="feature-card"><div class="feature-icon">&#9672;</div><h3>Honest answer boundaries</h3><p>Distinguish a documented rationale from a partial history summary. Abstain when evidence is missing.</p></article>
+    </div>
+  </section>
+  <section class="landing-section" id="neo4j">
+    <div class="neo-banner">
+      <div>
+        <span class="eyebrow">GRAPH DATABASE &middot; TRACK PARTNER</span>
+        <h2><span class="neo-symbol">&#8984;</span> Neo4j AuraDB</h2>
+        <p>WhyTrace is designed around graph-shaped engineering history. Neo4j AuraDB is the persistent graph store for artifact relationships and traversal. Configure your AuraDB credentials to enable real persistence. The included demo fixture is clearly labelled and does not claim to use a live database.</p>
+        <span class="neo-pill">NEO4J AURADB &middot; GRAPH-FIRST ARCHITECTURE</span>
+      </div>
+      <button class="btn-secondary" data-health>View integration health &#8599;</button>
+    </div>
+  </section>
+  <section class="landing-section final-cta">
+    <div class="section-title">
+      <span class="eyebrow">TRY THE WORKSPACE</span>
+      <h2>Ask the question<br/>the code can't answer.</h2>
+      <p>Explore a clearly labelled synthetic repository fixture, then connect a public GitHub repository of your own.</p>
+      <button class="btn-primary" data-enter>Explore WhyTrace &#8599;</button>
+    </div>
+  </section>
+  <footer class="landing-footer">WHYTRACE &middot; UNDERSTAND WHY THE CODE EXISTS &middot; APPLIED AI TRACK T1.1 &middot; BUILT WITH NEO4J</footer>
+</main>
+
+<main id="workspace" class="workspace app-shell hidden">
+  <div id="onboarding-overlay" class="onboarding-overlay hidden">
+    <div class="onboarding-card">
+      <div class="onboarding-steps">
+        <div class="ob-step active" data-ob="0"><div class="ob-num">1</div><div class="ob-body"><b>Connect a Repository</b><p>Enter a public GitHub URL or owner/repo, or load the demo fixture to explore immediately.</p></div></div>
+        <div class="ob-step" data-ob="1"><div class="ob-num">2</div><div class="ob-body"><b>Explore the Knowledge Graph</b><p>Files, commits, PRs, issues and decisions are connected nodes. Click any node to inspect it.</p></div></div>
+        <div class="ob-step" data-ob="2"><div class="ob-num">3</div><div class="ob-body"><b>Ask an Engineering Question</b><p>"Why is the retry limit set to 3?" — WhyTrace traverses evidence to explain, not guess.</p></div></div>
+        <div class="ob-step" data-ob="3"><div class="ob-num">4</div><div class="ob-body"><b>Inspect the Evidence</b><p>Every answer shows the exact source records used. Click citations to open GitHub directly.</p></div></div>
+      </div>
+      <div class="ob-actions">
+        <button class="btn-secondary" id="ob-skip">Skip introduction</button>
+        <button class="btn-primary" id="ob-next">Get started &#8599;</button>
+      </div>
+    </div>
+  </div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <a href="/" class="brand" data-home><span class="brand-mark">&#8984;</span><span>Why<span class="brand-accent">Trace</span></span></a>
+      <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle sidebar" aria-label="Toggle sidebar">&#9664;</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">WORKSPACE</div>
+      <button class="side-link" data-nav="overview" title="Overview"><span class="side-icon">&#8962;</span><span class="side-text">Overview</span></button>
+      <button class="side-link active" data-nav="investigation" title="Investigations"><span class="side-icon">&#8981;</span><span class="side-text">Investigations</span></button>
+      <button class="side-link" data-nav="graph" title="Knowledge Graph"><span class="side-icon">&#9678;</span><span class="side-text">Knowledge Graph</span></button>
+      <button class="side-link" data-nav="repository" title="Repository"><span class="side-icon">&#9635;</span><span class="side-text">Repository</span></button>
+      <button class="side-link" data-nav="timeline" title="Timeline"><span class="side-icon">&#9719;</span><span class="side-text">Timeline</span></button>
+      <button class="side-link" data-nav="evidence" title="Evidence"><span class="side-icon">&#9636;</span><span class="side-text">Evidence</span></button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">SYSTEM</div>
+      <button class="side-link" data-health title="System Health"><span class="side-icon">&#9673;</span><span class="side-text">System Health</span></button>
+      <button class="side-link" data-settings title="Integration Setup"><span class="side-icon">&#9881;</span><span class="side-text">Integration Setup</span></button>
+    </div>
+    <div class="sidebar-spacer"></div>
+    <div class="neo-sidebar">
+      <small>Graph database</small>
+      <b><span class="neo-symbol">&#8984;</span> neo4j</b>
+      <p>Knowledge graphs for world-changing applications.</p>
+      <div class="neo-status-row"><span class="neo-dot" id="neo-dot"></span><span id="neo-sidebar-status">Checking&hellip;</span></div>
+      <button class="neo-track-btn" data-health>Neo4j Track &#8599;</button>
+    </div>
+  </aside>
+  <section class="workspace-main">
+    <header class="topbar">
+      <div class="repo-select" id="topbar-repo-toggle" title="Click to manage repository connection">
+        <div class="github-square">&#9673;</div>
+        <div class="repo-fields"><small>REPOSITORY</small><strong id="repo-name">Loading&hellip;</strong></div>
+        <span class="chevron">&#8964;</span>
+      </div>
+      <div class="branch-box"><small>BRANCH</small><strong id="repo-branch">main</strong></div>
+      <div class="stats-box">
+        <div><b id="stat-commits">0</b><small>Commits</small></div>
+        <div><b id="stat-prs">0</b><small>Pull Reqs</small></div>
+        <div><b id="stat-issues">0</b><small>Issues</small></div>
+        <div><b id="stat-files">0</b><small>Files</small></div>
+      </div>
+      <button id="tour-button" class="tour-btn" title="Quick guided tour">? Guided Tour</button>
+      <button id="sync-button" class="sync-button">&#8635; Reload demo</button>
+      <div class="sync-state"><i id="header-neo-dot"></i><span id="storage-status">Demo fixture</span></div>
+    </header>
+    <div id="demo-banner" class="demo-banner"><b>DEMO DATA</b><span>&middot;</span><span>Synthetic acme/checkout-service fixture &mdash; not a real GitHub repository</span></div>
+    <div id="notice" class="notice hidden"></div>
+    <div id="error" class="notice error-notice hidden"></div>
+    <div class="workspace-grid">
+      <div class="main-stack">
+        <section class="panel investigation-panel" id="investigation-panel">
+          <div class="investigation-title">
+            <div>
+              <h2>Investigation</h2>
+              <p>Ask why something exists in the codebase &mdash; get evidence-backed answers</p>
+            </div>
+            <span class="eyebrow">EVIDENCE FIRST &middot; GRAPH POWERED</span>
+          </div>
+          
+          <!-- STEP 1 — Select Repository -->
+          <div class="inv-step-box" id="inv-step-1">
+            <div class="inv-step-header">
+              <span class="inv-step-pill">STEP 1</span>
+              <strong class="inv-step-heading">Select Repository</strong>
+              <button type="button" class="small-action change-repo-btn" id="change-repo-btn">&#8635; Change Repository</button>
+            </div>
+            <div class="inv-repo-bar">
+              <div class="inv-repo-badge">
+                <span class="inv-repo-dot"></span>
+                <span class="inv-repo-name" id="inv-repo-name">acme/checkout-service</span>
+                <span class="inv-repo-mode" id="inv-repo-mode">Demo fixture</span>
+              </div>
+              <div class="inv-repo-quick">
+                <span><b id="inv-stat-commits">0</b> commits</span>
+                <span><b id="inv-stat-prs">0</b> PRs</span>
+                <span><b id="inv-stat-issues">0</b> issues</span>
+                <span><b id="inv-stat-files">0</b> files</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 — Ask Your Question -->
+          <div class="inv-step-box" id="inv-step-2">
+            <div class="inv-step-header">
+              <span class="inv-step-pill">STEP 2</span>
+              <strong class="inv-step-heading">Ask Your Question</strong>
+            </div>
+            <form id="ask-form" class="question-input">
+              <input id="question-input" value="Why is the retry limit set to 3 in this implementation?" placeholder="Why does this implementation exist?" maxlength="500" aria-label="Investigation question"/>
+              <button id="ask-button" type="submit" class="btn-investigate" aria-label="Investigate"><span>Investigate</span> <b>&#10148;</b></button>
+            </form>
+            <div class="suggestions-label">SUGGESTED QUESTIONS:</div>
+            <div class="suggestions">
+              <button type="button" data-question="Why was this function introduced?">Why was this function introduced?</button>
+              <button type="button" data-question="Which commit changed this behavior?">Which commit changed this behavior?</button>
+              <button type="button" data-question="Which PR introduced this implementation?">Which PR introduced this implementation?</button>
+              <button type="button" data-question="What issue motivated this change?">What issue motivated this change?</button>
+              <button type="button" data-question="What evidence supports this decision?">What evidence supports this decision?</button>
+              <button type="button" data-question="Was this decision later superseded?">Was this decision later superseded?</button>
+            </div>
+          </div>
+
+          <!-- STEP 3 — Explore the Evidence -->
+          <div class="inv-step-box" id="inv-step-3">
+            <div class="inv-step-header">
+              <span class="inv-step-pill">STEP 3</span>
+              <strong class="inv-step-heading">Explore the Evidence</strong>
+            </div>
+            <div id="answer-loading" class="loading-row hidden">
+              <span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span> Traversing Neo4j knowledge graph and retrieving evidence&hellip;
+            </div>
+            <div id="answer-grid" class="answer-grid hidden">
+              <div class="answer-card">
+                <div class="answer-head">
+                  <div class="answer-head-title"><span class="answer-check">&#10004;</span><b id="answer-title">Answer</b></div>
+                  <div class="answer-head-meta">
+                    <span id="answer-source-badge" class="engine-badge hidden"></span>
+                    <span id="confidence" class="confidence">&#9679; HIGH CONFIDENCE</span>
+                  </div>
+                </div>
+                <div id="answer-copy" class="answer-copy"></div>
+                <div id="answer-supersession" class="supersession-banner hidden"><span class="supersession-icon">!</span><span id="supersession-text">This decision is still active and has not been superseded.</span></div>
+                <div id="answer-caveats" class="caveats"></div>
+                <div id="answer-retrieval" class="retrieval-meta hidden"><span id="retrieval-detail"></span></div>
+              </div>
+              <div class="evidence-card">
+                <div class="evidence-card-head">
+                  <h3>Key Evidence <small id="evidence-count">(0)</small></h3>
+                  <small class="evidence-card-hint">Click a record to highlight in graph</small>
+                </div>
+                <div id="evidence-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- KNOWLEDGE GRAPH & REPOSITORY TOOLS -->
+        <section class="panel" id="graph-panel">
+          <div class="panel-head">
+            <div><h2 id="graph-title">Knowledge Graph</h2><p>Explore relationships between code, commits, discussions and decisions</p></div>
+            <div class="panel-actions">
+              <div class="toggle-group">
+                <button class="toggle-btn active" data-graphmode="graph">&#8984; Graph</button>
+                <button class="toggle-btn" data-graphmode="timeline">&#9719; Timeline</button>
+              </div>
+              <button class="tool-btn" id="zoom-in" title="Zoom in">&#65291;</button>
+              <button class="tool-btn" id="zoom-out" title="Zoom out">&#65293;</button>
+              <button class="tool-btn" id="fit-graph" title="Reset graph view, zoom and search">&#10562;</button>
+            </div>
+          </div>
+          <div id="repository-panel" class="repository-panel hidden">
+            <div class="repo-context-head">
+              <div class="repo-logo">&#9673;</div>
+              <div><b id="repo-context-name">acme/checkout-service</b><p id="repo-context-description">Synthetic repository fixture.</p></div>
+            </div>
+            <div class="repo-quick-select">
+              <span class="quick-label">QUICK SWITCH:</span>
+              <button type="button" class="quick-repo-btn" id="quick-demo-btn">&#8984; Demo Fixture (acme/checkout-service)</button>
+              <button type="button" class="quick-repo-btn" id="quick-sayright-btn">&#9673; SayRight (Neo4j AuraDB)</button>
+            </div>
+            <div class="repo-form">
+              <input id="repo-input" placeholder="owner/repository or https://github.com/owner/repo" autocomplete="off"/>
+              <button id="connect-repo" class="small-action">Connect repository &#8599;</button>
+            </div>
+            <p class="panel-subtitle">Public repository ingestion is bounded to recent commits, pull requests, issues and a small set of commit file details. No GitHub OAuth is required for public repositories. GitHub rate limits still apply.</p>
+            <div class="repo-meta" id="repo-meta">The demo fixture is synthetic. Connect a public repository to replace it with fetched records.</div>
+            <div id="ingest-progress" class="ingest-progress hidden">
+              <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+              <span id="progress-label">Fetching repository data&hellip;</span>
+            </div>
+          </div>
+          <div id="graph-view" class="graph-content">
+            <div class="graph-toolbar">
+              <label class="graph-search"><span>&#8981;</span><input id="graph-search" placeholder="Search nodes&hellip;" autocomplete="off"/><button type="button" id="clear-search" class="clear-search hidden" title="Clear search">&#10005;</button></label>
+              <small id="graph-count">0 NODES &middot; 0 RELATIONSHIPS</small>
+            </div>
+            <div class="graph-stage">
+              <svg id="graph-svg" viewBox="0 0 950 340" preserveAspectRatio="xMidYMid meet" aria-label="Interactive repository knowledge graph"></svg>
+              <div class="graph-help">DRAG TO PAN &middot; SCROLL TO ZOOM &middot; CLICK A NODE</div>
+              <div class="graph-legend">
+                <span><i style="background:#36d7e8"></i>File</span><span><i style="background:#499fff"></i>Commit</span>
+                <span><i style="background:#a76bff"></i>Pull Req</span><span><i style="background:#ff6d78"></i>Issue</span>
+                <span><i style="background:#f3bf58"></i>Decision</span><span><i style="background:#7b8dff"></i>Developer</span>
+                <span><i style="background:#54d99c"></i>Config</span><span><i style="background:#ce76ec"></i>Discussion</span>
+              </div>
+            </div>
+          </div>
+          <div id="timeline-view" class="timeline-list hidden"></div>
+          <div id="evidence-view" class="evidence-full-view hidden">
+            <div class="evidence-full-head"><h3>Repository Evidence Records</h3><p>All connected artifacts currently available in the active graph</p></div>
+            <div id="evidence-full-list" class="evidence-full-list"></div>
+          </div>
+        </section>
+      </div>
+      <aside class="right-rail">
+        <section class="right-card" id="details-card">
+          <div class="right-card-head"><b id="details-card-title">File Details</b><div class="card-head-actions"><span class="card-head-symbol">&#8984;</span><button class="icon-close" id="close-details" title="Close details">&#10005;</button></div></div>
+          <div class="details-tabs">
+            <button class="details-tab active" data-tab="overview">Overview</button>
+            <button class="details-tab" data-tab="changes">Changes</button>
+            <button class="details-tab" data-tab="references">References</button>
+          </div>
+          <div class="right-card-body" id="file-details"><div class="empty-state">Select a graph node to inspect its details, evidence and connections.</div></div>
+        </section>
+        <section class="right-card">
+          <div class="right-card-head"><b>Related Developers</b><small id="developer-count">0</small></div>
+          <div class="right-card-body" id="developers-list"><div class="empty-state">No contributor records loaded yet.</div></div>
+        </section>
+        <section class="right-card">
+          <div class="right-card-head"><b>Related Files</b><small id="files-count">0</small></div>
+          <div class="right-card-body" id="related-files"><div class="empty-state">No file records loaded yet.</div></div>
+        </section>
+        <section class="right-card">
+          <div class="right-card-head"><b>Integration Status</b><button class="text-link" data-health>View all &#8599;</button></div>
+          <div class="right-card-body">
+            <div class="health-row"><span>GitHub ingestion</span><b id="github-inline" class="state-neutral">READY</b></div>
+            <div class="health-row"><span>Neo4j AuraDB</span><b id="neo-inline" class="state-warn">CHECKING&hellip;</b></div>
+            <div class="health-row"><span>Answer engine</span><b class="state-neutral">DETERMINISTIC</b></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+    <footer class="workspace-footer">WHYTRACE &middot; <span id="footer-mode">DEMO FIXTURE</span> &middot; ANSWERS LIMITED TO RETRIEVED EVIDENCE &middot; BUILT WITH NEO4J</footer>
+  </section>
+</main>
+
+<main id="health-screen" class="health-screen app-shell hidden">
+  <header class="health-header">
+    <button class="back-link" data-back>&larr; Workspace</button>
+    <a href="/" class="brand" data-home><span class="brand-mark">&#8984;</span><span>Why<span class="brand-accent">Trace</span></span></a>
+    <button id="refresh-health" class="sync-button">&#8635; Refresh checks</button>
+  </header>
+  <div class="health-wrap">
+    <span class="eyebrow">SYSTEM DIAGNOSTICS</span>
+    <h1>Integration health</h1>
+    <p>These states come from server-side configuration and live checks. A configured credential is not treated as a verified connection.</p>
+    <div id="health-grid" class="health-grid"><div class="health-tile">Checking integrations&hellip;</div></div>
+    <section class="panel health-cache">
+      <div class="panel-head"><div><h2>Loaded repositories</h2><p>Process-local cache entries disappear when the server restarts unless they are persisted to Neo4j.</p></div></div>
+      <div id="health-repositories" class="health-repositories">No repository has been loaded in this server process yet.</div>
+    </section>
+    <section class="panel health-setup" id="health-settings">
+      <div class="panel-head"><div><h2>Configure optional integrations</h2><p>Create <code>.env.local</code> in the project root. Never commit this file.</p></div></div>
+      <div class="setup-grid">
+        <article><b>Neo4j AuraDB</b><p>Set these server-side values to enable real persistence. Restart the server after editing.</p><pre>NEO4J_URI=neo4j+s://&lt;instance&gt;.databases.neo4j.io
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=&lt;your-password&gt;</pre></article>
+        <article><b>GitHub Token</b><p>Public repositories work without a token, subject to unauthenticated rate limits. A token increases the limit significantly.</p><pre>GITHUB_TOKEN=&lt;optional-personal-access-token&gt;</pre></article>
+        <article><b>AI Provider (Gemini)</b><p>The built-in deterministic answer engine works without a key. Gemini rephrases evidence-backed answers for clarity.</p><pre>GEMINI_API_KEY=&lt;optional-key&gt;
+GEMINI_MODEL=gemini-3.5-flash-lite</pre></article>
+      </div>
+    </section>
+    <footer id="health-last-check">LAST CHECK &middot; NOT RUN</footer>
+  </div>
+</main>
+</body>
+</html>
